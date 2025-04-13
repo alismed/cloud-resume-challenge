@@ -1,0 +1,74 @@
+resource "aws_s3_bucket" "static_website" {
+  bucket = var.s3_bucket_name
+
+  tags = {
+    Name        = "Static Website Bucket"
+    Environment = terraform.workspace
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "static_website_access_block" {
+  bucket = aws_s3_bucket.static_website.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_ownership_controls" "static_website_ownership_controls" {
+  depends_on = [aws_s3_bucket_public_access_block.static_website_access_block]
+  bucket     = aws_s3_bucket.static_website.id
+
+  rule {
+    object_ownership = var.object_ownership
+  }
+}
+
+resource "aws_s3_bucket_acl" "static_site_bucket" {
+  depends_on = [
+    aws_s3_bucket_public_access_block.static_website_access_block,
+    aws_s3_bucket_ownership_controls.static_website_ownership_controls
+  ]
+
+  bucket = aws_s3_bucket.static_website.id
+  acl    = var.acl_type
+}
+
+resource "aws_s3_bucket_policy" "static_website_policy" {
+  depends_on = [aws_s3_bucket_public_access_block.static_website_access_block]
+  bucket = aws_s3_bucket.static_website.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
+        Resource  = "${aws_s3_bucket.static_website.arn}/*"
+      }
+    ]
+  })
+}
+
+resource "aws_s3_bucket_website_configuration" "static_website_configuration" {
+  bucket = aws_s3_bucket.static_website.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
+resource "aws_s3_object" "website_files" {
+  for_each = fileset(var.app_path, "**/*")
+
+  bucket       = aws_s3_bucket.static_website.id
+  key          = each.value
+  source       = "${var.app_path}/${each.value}"
+  content_type = lookup(local.mime_types, regex("\\.[^.]+$", each.value), null)
+}
