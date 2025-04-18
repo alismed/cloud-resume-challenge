@@ -10,9 +10,9 @@ resource "aws_s3_bucket" "static_website" {
 resource "aws_s3_bucket_public_access_block" "static_website_access_block" {
   bucket = aws_s3_bucket.static_website.id
 
-  block_public_acls       = false
+  block_public_acls       = true
   block_public_policy     = false
-  ignore_public_acls      = false
+  ignore_public_acls      = true
   restrict_public_buckets = false
 }
 
@@ -24,7 +24,7 @@ resource "aws_s3_bucket_ownership_controls" "static_website_ownership_controls" 
     object_ownership = var.object_ownership
   }
 }
-
+/*
 resource "aws_s3_bucket_acl" "static_site_bucket" {
   depends_on = [
     aws_s3_bucket_public_access_block.static_website_access_block,
@@ -34,19 +34,27 @@ resource "aws_s3_bucket_acl" "static_site_bucket" {
   bucket = aws_s3_bucket.static_website.id
   acl    = var.acl_type
 }
-
+*/
 resource "aws_s3_bucket_policy" "static_website_policy" {
   depends_on = [aws_s3_bucket_public_access_block.static_website_access_block]
-  bucket = aws_s3_bucket.static_website.id
+  bucket     = aws_s3_bucket.static_website.id
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Effect    = "Allow"
-        Principal = "*"
-        Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.static_website.arn}/*"
+        Sid    = "AllowCloudFrontServicePrincipal"
+        Effect = "Allow"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
+        Action   = "s3:GetObject"
+        Resource = "${aws_s3_bucket.static_website.arn}/*"
+        Condition = {
+          StringEquals = {
+            "AWS:SourceArn" = aws_cloudfront_distribution.main.arn
+          }
+        }
       }
     ]
   })
