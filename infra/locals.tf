@@ -8,6 +8,6 @@ locals {
     ".jpeg" = "image/jpeg"
     ".gif"  = "image/gif"
     ".ico"  = "image/x-icon"
-    "svg"  = "image/svg+xml"
+    "svg"   = "image/svg+xml"
   }
 }

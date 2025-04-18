@@ -14,7 +14,18 @@ output "s3_bucket_arn" {
   value = aws_s3_bucket.static_website.arn
 }
 
-output "website_url" {
-  description = "URL do website"
-  value       = "http://${aws_s3_bucket_website_configuration.static_website_configuration.website_endpoint}"
+output "cloudfront_distribution_id" {
+  value = aws_cloudfront_distribution.main.id
+}
+
+output "cloudfront_distribution_arn" {
+  value = aws_cloudfront_distribution.main.arn
+}
+
+output "cloudfront_distribution_domain_name" {
+  value = aws_cloudfront_distribution.main.domain_name
+}
+
+output "cloudfront_url" {
+  value = "https://${aws_cloudfront_distribution.main.domain_name}"
 }
