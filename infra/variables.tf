@@ -10,6 +10,15 @@ variable "profile" {
   default     = "default"
 }
 
+variable "tags" {
+  description = "Tags to apply to all resources"
+  type        = map(string)
+  default = {
+    Environment = "production"
+    Project     = "cloud resume challenge"
+  }
+}
+
 variable "s3_bucket_name" {
   description = "Name of the S3 Bucket"
   type        = string
@@ -33,3 +42,16 @@ variable "object_ownership" {
   type        = string
   default     = "BucketOwnerPreferred"
 }
+
+variable "index_document" {
+  description = "The index document for the S3 bucket"
+  type        = string
+  default     = "index.html"
+}
+
+variable "error_document" {
+  description = "The error document for the S3 bucket"
+  type        = string
+  default     = "error.html"
+}
+
