@@ -7,7 +7,7 @@ resource "aws_dynamodb_table_item" "seed_items" {
 
   item = jsonencode({
     id = {
-      S = tostring(count.index)
+      S = "visitor_count"
     }
     visitors = {
       N = "0"

@@ -1,6 +1,10 @@
 .idea/*
 .vscode/*
 
+app/target/*
+app/lambda/target/*
+
+
 # Local .terraform directories
 **/.terraform/*
 
