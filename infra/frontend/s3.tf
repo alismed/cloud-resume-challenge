@@ -28,7 +28,26 @@ resource "aws_s3_bucket_ownership_controls" "static_website_ownership_controls" 
 resource "aws_s3_bucket_policy" "static_website_policy" {
   depends_on = [aws_s3_bucket_public_access_block.static_website_access_block]
   bucket     = aws_s3_bucket.static_website.id
-  policy     = file("trust/s3-policy.json")
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "AllowCloudFrontServicePrincipal"
+        Effect    = "Allow"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
+        Action   = "s3:GetObject"
+        Resource = "${aws_s3_bucket.static_website.arn}/*"
+        Condition = {
+          StringEquals = {
+            "AWS:SourceArn" = aws_cloudfront_distribution.main.arn
+          }
+        }
+      }
+    ]
+  })
 }
 
 resource "aws_s3_bucket_website_configuration" "static_website_configuration" {
