@@ -26,20 +26,20 @@ resource "aws_cloudfront_distribution" "main" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  default_root_object = "index.html"
+  default_root_object = var.index_document
 
   custom_error_response {
     error_code         = 403
     response_code      = 404
-    response_page_path = "/error.html"
+    response_page_path = "/${var.error_document}"
   }
 
   custom_error_response {
     error_code         = 404
     response_code      = 404
-    response_page_path = "/error.html"
+    response_page_path = "/${var.error_document}"
   }
-  
+
   price_class = "PriceClass_100"
 
   restrictions {

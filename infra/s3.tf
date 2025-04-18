@@ -24,51 +24,22 @@ resource "aws_s3_bucket_ownership_controls" "static_website_ownership_controls" 
     object_ownership = var.object_ownership
   }
 }
-/*
-resource "aws_s3_bucket_acl" "static_site_bucket" {
-  depends_on = [
-    aws_s3_bucket_public_access_block.static_website_access_block,
-    aws_s3_bucket_ownership_controls.static_website_ownership_controls
-  ]
 
-  bucket = aws_s3_bucket.static_website.id
-  acl    = var.acl_type
-}
-*/
 resource "aws_s3_bucket_policy" "static_website_policy" {
   depends_on = [aws_s3_bucket_public_access_block.static_website_access_block]
   bucket     = aws_s3_bucket.static_website.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid    = "AllowCloudFrontServicePrincipal"
-        Effect = "Allow"
-        Principal = {
-          Service = "cloudfront.amazonaws.com"
-        }
-        Action   = "s3:GetObject"
-        Resource = "${aws_s3_bucket.static_website.arn}/*"
-        Condition = {
-          StringEquals = {
-            "AWS:SourceArn" = aws_cloudfront_distribution.main.arn
-          }
-        }
-      }
-    ]
-  })
+  policy     = file("trust/s3-policy.json")
 }
 
 resource "aws_s3_bucket_website_configuration" "static_website_configuration" {
   bucket = aws_s3_bucket.static_website.id
 
   index_document {
-    suffix = "index.html"
+    suffix = var.index_document
   }
 
   error_document {
-    key = "error.html"
+    key = var.error_document
   }
 }
 
