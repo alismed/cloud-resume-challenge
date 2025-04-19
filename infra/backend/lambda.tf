@@ -36,4 +36,11 @@ resource "aws_lambda_function" "count_visitors" {
   )
 }
 
-
+resource "aws_lambda_permission" "apigw_invoke" {
+  depends_on    = [aws_lambda_function.count_visitors]
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.count_visitors.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.visitors_count_api.execution_arn}/*/*"
+}
