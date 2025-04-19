@@ -1,8 +1,11 @@
 
 
 ```shell
-cd app/lambda
-python -m pytest tests
+flake8 app/lambda/
+```
+
+```shell
+python -m pytest app/lambda/tests
 ```
 
 
