@@ -19,24 +19,27 @@ def lambda_handler(event, context):
                 },
                 ReturnValues='UPDATED_NEW'
             )
-            
-        responseBody = json.dumps({"count":int(dynamodbResponse['Attributes']['visitors'])})
 
-    except:
-        putItem = table.put_item(
-            Item = {
+        responseBody = json.dumps({
+            "count": int(dynamodbResponse['Attributes']['visitors'])})
+
+    except Exception as e:
+        print(f"Error: {e}")
+        table.put_item(
+            Item={
                 'id': 'visitor_count',
                 'visitors': 1
             }
         )
 
         dynamodbResponse = table.get_item(
-            Key = {
+            Key={
                 'id': 'visitor_count',
             }
         )
 
-        responseBody = json.dumps({"count":int(dynamodbResponse['Item']['visitors'])})
+        responseBody = json.dumps({
+            "count": int(dynamodbResponse['Item']['visitors'])})
 
     apiResponse = {
         "isBase64Encoded": False,

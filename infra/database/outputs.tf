@@ -3,10 +3,6 @@ output "dynamodb_table_id" {
   value       = aws_dynamodb_table.visitors_count.id
 }
 
-output "visitors_table_arn" {
-  value = aws_dynamodb_table.visitors_count.arn
-}
-
 output "dynamodb_table_name" {
   description = "DynamoDB table name"
   value       = aws_dynamodb_table.visitors_count.name
@@ -35,4 +31,12 @@ output "seeded_items_count" {
 output "seeded_items" {
   description = "Items seeded in the DynamoDB table"
   value       = aws_dynamodb_table_item.seed_items
+}
+
+output "visitors_table_arn" {
+  value = aws_dynamodb_table.visitors_count.arn
+}
+
+output "visitors_table_name" {
+  value = aws_dynamodb_table.visitors_count.name
 }
