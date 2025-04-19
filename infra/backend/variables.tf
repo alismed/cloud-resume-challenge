@@ -7,7 +7,7 @@ variable "lambda_function_name" {
 variable "zip_file" {
   description = "The path to the zip file containing the Lambda function code"
   type        = string
-  default     = "../../app/lambda/target/app.zip"
+  default     = "../app/lambda/target/app.zip"
 }
 
 variable "memory_size" {
@@ -32,4 +32,9 @@ variable "lambda_runtime" {
   description = "The runtime for the Lambda function"
   type        = string
   default     = "python3.12"
+}
+
+variable "visitors_table_arn" {
+  description = "fom database module, DynamoDB table ARN"
+  type        = string
 }

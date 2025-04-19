@@ -1,3 +1,7 @@
+module "common" {
+  source = "../common"
+}
+
 resource "aws_dynamodb_table" "visitors_count" {
   name           = var.table_name
   billing_mode   = var.billing_mode
@@ -22,15 +26,16 @@ resource "aws_dynamodb_table" "visitors_count" {
   }
 
   tags = merge(
-    var.tags,
+    module.common.tags,
     {
       description = "count the number of visitors"
     }
   )
 }
-
+/*
 resource "aws_iam_role_policy_attachment" "dynamodb_role_policy_attachment" {
   depends_on = [aws_iam_role.dynamodb_role, aws_iam_policy.dynamodb_policy]
   role       = aws_iam_role.dynamodb_role.name
   policy_arn = aws_iam_policy.dynamodb_policy.arn
 }
+*/

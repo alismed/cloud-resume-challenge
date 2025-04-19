@@ -3,9 +3,8 @@ output "dynamodb_table_id" {
   value       = aws_dynamodb_table.visitors_count.id
 }
 
-output "dynamodb_table_arn" {
-  description = "DynamoDB table ARN"
-  value       = aws_dynamodb_table.visitors_count.arn
+output "visitors_table_arn" {
+  value = aws_dynamodb_table.visitors_count.arn
 }
 
 output "dynamodb_table_name" {

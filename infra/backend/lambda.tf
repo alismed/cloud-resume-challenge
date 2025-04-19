@@ -1,12 +1,16 @@
+module "common" {
+  source = "../common"
+}
+
 data "archive_file" "zip_the_python_code" {
   type        = "zip"
-  source_dir  = "../../app/lambda/"
-  output_path = "../../app/lambda/target/app.zip"
+  source_dir  = "../app/lambda/src/"
+  output_path = "../app/lambda/target/app.zip"
 }
 
 resource "aws_iam_role" "countVisitors_role" {
-  name               = "aws_resume_lamnbda_role"
-  assume_role_policy = file("../trust/lambda-policy.json")
+  name               = "aws_resume_lambda_role"
+  assume_role_policy = file("./trust/lambda-policy.json")
 }
 
 resource "aws_lambda_function" "count_visitors" {
@@ -25,7 +29,7 @@ resource "aws_lambda_function" "count_visitors" {
   }
 
   tags = merge(
-    var.tags,
+    module.common.tags,
     {
       description = "count the number of visitors"
     }
