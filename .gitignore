@@ -3,7 +3,23 @@
 
 app/target/*
 app/lambda/target/*
-
+.coverage
+*.swp
+__pycache__
+.pytest_cache
+.env
+.venv
+*.egg-info
+*.egg
+*.log
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.py[cod]
+*$py.class
+*.so
+venv/
 
 # Local .terraform directories
 **/.terraform/*
