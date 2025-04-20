@@ -1,3 +1,13 @@
+variable "region" {
+  description = "The AWS region to deploy the infrastructure"
+  type        = string
+}
+
+variable "profile" {
+  description = "The AWS profile to use for authentication"
+  type        = string
+}
+
 variable "seed_items_count" {
   description = "Number of items to seed in the DynamoDB table"
   type        = number
@@ -7,7 +17,6 @@ variable "seed_items_count" {
 variable "table_name" {
   description = "Name of the DynamoDB table"
   type        = string
-  default     = "website_visitors"
 }
 
 variable "billing_mode" {

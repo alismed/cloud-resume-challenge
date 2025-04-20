@@ -1,6 +1,8 @@
 .idea/*
 .vscode/*
 
+mock/
+
 app/target/*
 app/lambda/target/*
 .coverage

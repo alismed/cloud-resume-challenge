@@ -8,27 +8,24 @@ variable "profile" {
   type        = string
 }
 
+variable "table_name" {
+  description = "Name of the DynamoDB table"
+  type        = string
+}
+
 variable "s3_bucket_name" {
   description = "Name of the S3 Bucket"
   type        = string
 }
 
-variable "app_path" {
-  description = "Path to the application files"
+variable "lambda_function_name" {
+  description = "The name of the Lambda function"
   type        = string
-  default     = "../app/website/"
 }
-/*
-variable "acl_type" {
-  description = "The ACL type for the S3 bucket"
+
+variable "lambda_runtime" {
+  description = "The runtime for the Lambda function"
   type        = string
-  default     = "public-read"
-}
-*/
-variable "object_ownership" {
-  description = "The object ownership setting for the S3 bucket"
-  type        = string
-  default     = "BucketOwnerPreferred"
 }
 
 variable "index_document" {

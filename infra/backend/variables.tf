@@ -1,7 +1,16 @@
+variable "region" {
+  description = "The AWS region to deploy the infrastructure"
+  type        = string
+}
+
+variable "profile" {
+  description = "The AWS profile to use for authentication"
+  type        = string
+}
+
 variable "lambda_function_name" {
   description = "The name of the Lambda function"
   type        = string
-  default     = "countVisitors"
 }
 
 variable "zip_file" {
@@ -31,7 +40,6 @@ variable "handler" {
 variable "lambda_runtime" {
   description = "The runtime for the Lambda function"
   type        = string
-  default     = "python3.12"
 }
 
 variable "visitors_table_arn" {

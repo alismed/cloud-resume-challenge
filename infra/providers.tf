@@ -1,7 +1,3 @@
-module "common" {
-  source = "./common"
-}
-
 terraform {
   required_providers {
     aws = {
@@ -12,6 +8,6 @@ terraform {
 }
 
 provider "aws" {
-  region  = module.common.region
-  profile = terraform.workspace == "default" ? null : module.common.profile
+  region  = var.region
+  profile = terraform.workspace == "default" ? null : var.profile
 }
