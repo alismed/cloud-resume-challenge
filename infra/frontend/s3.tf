@@ -1,10 +1,16 @@
+module "common" {
+  source = "../common"
+}
+
 resource "aws_s3_bucket" "static_website" {
   bucket = var.s3_bucket_name
 
-  tags = {
-    Name        = "Static Website Bucket"
-    Environment = terraform.workspace
-  }
+  tags = merge(
+    module.common.tags,
+    {
+      description = "Static Website Bucket"
+    }
+  )
 }
 
 resource "aws_s3_bucket_public_access_block" "static_website_access_block" {
