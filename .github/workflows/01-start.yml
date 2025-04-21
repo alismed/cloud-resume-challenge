@@ -3,7 +3,7 @@ name: 01 - Start
 on:
   pull_request:
     types: opened
-    branches: [ feature/* ]
+    branches: [ main, feature/* ]
 
 jobs:
   validate:
@@ -16,6 +16,8 @@ jobs:
       destroy_infra: ${{ needs.validate.outputs.destroy_infra }}
       region: ${{ needs.validate.outputs.region }}
     secrets: inherit
+    permissions:
+      pull-requests: read
 
   notify:
     needs: [validate, deploy]
