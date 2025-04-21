@@ -7,18 +7,20 @@ on:
 
 jobs:
   validate:
-    uses: ./.github/workflows/02-validate.yml
+    uses: ./.github/workflows/02-validate.yml@main
 
   deploy:
     needs: validate
-    uses: ./.github/workflows/03-terraform.yml
+    uses: ./.github/workflows/03-terraform.yml@main
     with:
       destroy_infra: ${{ needs.validate.outputs.destroy_infra }}
       region: ${{ needs.validate.outputs.region }}
     secrets: inherit
+    permissions:
+      pull-requests: read
 
   notify:
     needs: [validate, deploy]
-    uses: ./.github/workflows/04-notify.yml
+    uses: ./.github/workflows/04-notify.yml@main
     permissions:
       pull-requests: write
