@@ -1,4 +1,4 @@
-name: "Notify adding comment on PR"
+name: 04 - Notify adding comment on PR
 
 on:
   workflow_call:

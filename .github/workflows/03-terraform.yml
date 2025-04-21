@@ -1,4 +1,4 @@
-name: "Execute deploy/terraform"
+name: 03 - Execute deploy/terraform
 
 on:
   workflow_call:
@@ -25,6 +25,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ inputs.region }}
+
+      - name: Get Description from Pull Request
+        run: |
+          export DESCRIPTION=$(echo "${{ github.event.pull_request.body }}")
+          echo "Description: $DESCRIPTION"
+          echo "DESCRIPTION=$DESCRIPTION" >> $GITHUB_ENV
 
       - name: Terraform Setup
         run: |
