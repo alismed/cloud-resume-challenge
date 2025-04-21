@@ -3,7 +3,7 @@ name: 01 - Start
 on:
   pull_request:
     types: opened
-    branches: [ feature/* ]
+    branches: [ main, feature/* ]
 
 jobs:
   validate:
