@@ -22,5 +22,7 @@ jobs:
   notify:
     needs: [validate, deploy]
     uses: ./.github/workflows/04-notify.yml
+    with:
+      destroy_infra: ${{ needs.validate.outputs.destroy_infra }}
     permissions:
       pull-requests: write
