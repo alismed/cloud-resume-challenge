@@ -23,6 +23,13 @@ jobs:
         run: |
           npm install -g figlet-cli
 
+      - name: Check AWS Credentials
+        run: |
+          if [ -z "${{ secrets.AWS_ACCESS_KEY_ID }}" ] || [ -z "${{ secrets.AWS_SECRET_ACCESS_KEY }}" ]; then
+            figlet --horizontal-layout full "Error: AWS credentials not found"
+            exit 1
+          fi
+
       - uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}

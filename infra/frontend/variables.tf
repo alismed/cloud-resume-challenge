@@ -18,13 +18,7 @@ variable "app_path" {
   type        = string
   default     = "../app/website/"
 }
-/*
-variable "acl_type" {
-  description = "The ACL type for the S3 bucket"
-  type        = string
-  default     = "public-read"
-}
-*/
+
 variable "object_ownership" {
   description = "The object ownership setting for the S3 bucket"
   type        = string
