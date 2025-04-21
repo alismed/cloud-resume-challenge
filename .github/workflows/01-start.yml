@@ -1,12 +1,9 @@
-name: 01 - Infraestructure Workflow using Terraform form Cloud Resume Challenge
+name: 01 - Start
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - feature/*
+    types: opened
+    branches: [ feature/* ]
 
 jobs:
   validate:
@@ -15,6 +12,10 @@ jobs:
   deploy:
     needs: validate
     uses: ./.github/workflows/03-terraform.yml
+    with:
+      destroy_infra: ${{ needs.validate.outputs.destroy_infra }}
+      region: ${{ needs.validate.outputs.region }}
+    secrets: inherit
 
   notify:
     needs: [validate, deploy]

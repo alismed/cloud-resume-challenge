@@ -10,6 +10,9 @@ on:
         required: true
         type: string
 
+permissions:
+  pull-requests: read
+
 jobs:
   terraform:
     runs-on: ubuntu-22.04
