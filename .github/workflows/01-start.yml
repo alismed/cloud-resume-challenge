@@ -1,0 +1,23 @@
+name: Infraestructure Workflow using Terraform form Cloud Resume Challenge
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - feature/*
+
+jobs:
+  validate:
+    uses: ./.github/workflows/02-validate.yml
+
+  deploy:
+    needs: validate
+    uses: ./.github/workflows/03-terraform.yml
+
+  notify:
+    needs: [validate, deploy]
+    uses: ./.github/workflows/04-notify.yml
+    permissions:
+      pull-requests: write

@@ -1,0 +1,38 @@
+name: "Notify adding comment on PR"
+
+on:
+  workflow_call:
+    inputs:
+      cluster_name:
+        required: true
+        type: string
+      service_name:
+        required: true
+        type: string
+      destroy_infra:
+        required: true
+        type: string
+
+permissions:
+  pull-requests: write
+
+jobs:
+  notify:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Add comment to PR
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const action = "${{ inputs.destroy_infra }}" === "true" ? "destruída" : "criada";
+            const msg = [
+              `Infra ${{ inputs.cluster_name }} foi ${action} com sucesso!`,
+            ].join('\n');
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              issue_number: context.issue.number,
+              repo: context.repo.repo,
+              body: msg
+            });
