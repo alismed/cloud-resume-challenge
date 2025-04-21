@@ -1,4 +1,4 @@
-name: Validate infraestructure variables
+name: 01 - Validate infraestructure variables
 
 on:
   workflow_call:

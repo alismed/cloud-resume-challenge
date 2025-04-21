@@ -1,4 +1,4 @@
-name: Infraestructure Workflow using Terraform form Cloud Resume Challenge
+name: 01 - Infraestructure Workflow using Terraform form Cloud Resume Challenge
 
 on:
   push:
