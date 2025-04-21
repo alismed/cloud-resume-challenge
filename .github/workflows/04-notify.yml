@@ -3,12 +3,6 @@ name: 04 - Notify adding comment on PR
 on:
   workflow_call:
     inputs:
-      cluster_name:
-        required: true
-        type: string
-      service_name:
-        required: true
-        type: string
       destroy_infra:
         required: true
         type: string
