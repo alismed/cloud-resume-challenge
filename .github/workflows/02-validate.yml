@@ -1,0 +1,43 @@
+name: Validate infraestructure variables
+
+on:
+  workflow_call:
+    outputs:
+      region:
+        value: ${{ jobs.validate.outputs.region }}
+      destroy_infra:
+        value: ${{ jobs.validate.outputs.destroy_infra }}
+      table_name:
+        value: ${{ jobs.validate.outputs.table_name }}
+      s3_bucket_name:
+        value: ${{ jobs.validate.outputs.s3_bucket_name }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-22.04
+    container: hashicorp/terraform:1.5
+
+    outputs:
+      region: ${{ steps.vars.outputs.region }}
+      destroy_infra: ${{ steps.vars.outputs.destroy_infra }}
+      table_name: ${{ steps.vars.outputs.table_name }}
+      s3_bucket_name: ${{ steps.vars.outputs.s3_bucket_name }}
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Node.js
+        run: |
+          apk add --update nodejs npm
+          npm install -g figlet-cli
+
+#      - name: Set up Terraform
+#        run: terraform init
+
+      - id: vars
+        name: Read Variables
+        run: |
+          echo "region=$(grep 'region' infra/terraform.tfvars | cut -d'"' -f2)" >> $GITHUB_OUTPUT
+          echo "destroy_infra=$(grep 'destroy_infra' infra/destroy.yml | cut -d':' -f2 | tr -d '[:space:]')" >> $GITHUB_OUTPUT
+          echo "table_name=$(grep 'table_name' infra/terraform.tfvars | cut -d'"' -f2)" >> $GITHUB_OUTPUT
+          echo "s3_bucket_name=$(grep 's3_bucket_name' infra/terraform.tfvars | cut -d'"' -f2)" >> $GITHUB_OUTPUT

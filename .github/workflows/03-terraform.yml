@@ -1,0 +1,50 @@
+name: "Execute deploy/terraform"
+
+on:
+  workflow_call:
+    inputs:
+      destroy_infra:
+        required: true
+        type: string
+      region:
+        required: true
+        type: string
+
+jobs:
+  terraform:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          npm install -g figlet-cli
+
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ inputs.region }}
+
+      - name: Terraform Setup
+        run: |
+          if ! command -v terraform &> /dev/null; then
+            apt-get update
+            apt-get install -y unzip curl
+            curl -o terraform.zip https://releases.hashicorp.com/terraform/1.5.0/terraform_1.5.0_linux_amd64.zip
+            unzip terraform.zip
+            mv terraform /usr/local/bin/
+          fi
+          terraform version
+
+      - name: Terraform Operations
+        run: |
+          cd infra
+          terraform init
+          echo "destroy_infra: ${{ inputs.destroy_infra }}"
+          if [ "${{ inputs.destroy_infra }}" == "true" ]; then
+            figlet --horizontal-layout full "Infra will be destroyed"
+            terraform destroy -auto-approve || (figlet figlet --horizontal-layout full "Error: Terraform destroy Failed" && exit 1)
+          else
+            terraform apply -auto-approve || (figlet figlet --horizontal-layout full "Error: Terraform Apply Failed" && exit 1)
+          fi
